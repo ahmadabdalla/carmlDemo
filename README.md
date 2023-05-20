@@ -1,6 +1,6 @@
-# Demo deploying using CARML modules using Template Specs
+# Demo: Deploying an Azure Solution Using CARML modules published as Template Specs
 
-This repository contains a demo deploying a solution using the [CARML](https://aka.ms/carml) Bicep library.
+Inspired by the [Common Azure Resource Modules Library (CARML)](https://aka.ms/carml).
 
 ## Architecture
 
