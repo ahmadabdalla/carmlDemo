@@ -11,7 +11,7 @@ module resourceGroup 'ts/artifacts:resources.resourcegroups:latest' = {
   }
 }
 
-module userManagedIdentity 'br/overlays:managed-identity.user-assigned-identities:0.4.4' = {
+module userManagedIdentity 'br/overlays:managed-identity.user-assigned-identities:1.0' = {
   scope: az.resourceGroup(resourceGroupNameCore)
   name: 'test-managedIdentityOverlay'
   params: {
