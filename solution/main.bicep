@@ -1,11 +1,17 @@
-targetScope = 'subscription'
 
-param identifier string = 'carmldemoX'
-param  resourceGroupNameCore string = 'rg-${identifier}-core'
 
-module coreResourceGroup 'childModules/core.bicep' = {
-  name: '${uniqueString(deployment().name)}-core'
+module userManagedIdentity 'ts/overlays:managed-identity.user-assigned-identities-overlay-remote:1.2' = {
+  name: 'test-managedIdentityOverlay'
   params: {
-    resourceGroupNameCore: resourceGroupNameCore
+    name: 'testmiahmnamemi'
+  }
+}
+
+
+
+module storageAccount 'ts/overlays:storage.storage-accounts-overlay-remote:1.0' = {
+  name: 'test-storageAccountOverlay'
+  params: {
+    name: userManagedIdentity.outputs.name
   }
 }
