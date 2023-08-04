@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.20.4.51522",
+      "templateHash": "310872382756858223"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "australiaeast"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2022-09-01",
+      "name": "test-rg",
+      "location": "[parameters('location')]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "test-managedIdentityOverlay",
+      "resourceGroup": "test-rg",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "testmiahmnamemi"
+          }
+        },
+        "templateLink": {
+          "id": "/subscriptions/20d6fbfe-b049-471c-95af-1369d14d0d45/resourceGroups/overlays-rg/providers/Microsoft.Resources/templateSpecs/managed-identity.user-assigned-identities-overlay-remote/versions/1.2"
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', 'test-rg')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "test-storageAccountOverlay",
+      "resourceGroup": "test-rg",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, 'test-rg'), 'Microsoft.Resources/deployments', 'test-managedIdentityOverlay'), '2022-09-01').outputs.name.value]"
+          }
+        },
+        "templateLink": {
+          "id": "/subscriptions/20d6fbfe-b049-471c-95af-1369d14d0d45/resourceGroups/overlays-rg/providers/Microsoft.Resources/templateSpecs/storage.storage-accounts-overlay-remote/versions/1.0"
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, 'test-rg'), 'Microsoft.Resources/deployments', 'test-managedIdentityOverlay')]"
+      ]
+    }
+  ]
+}
